@@ -1,0 +1,14 @@
+#app {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  gap: 2rem;
+  margin: 0 auto;
+  text-align: center;
+  font-family: fantasy;
+  -webkit-border-radius: 36px;
+border-radius: 36px;
+background: #816029;
+-webkit-box-shadow: 7px 7px 33px #684e21, -7px -7px 33px #9a7231;
+box-shadow: 7px 7px 33px #684e21, -7px -7px 33px #9a7231;
+}
