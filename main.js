@@ -1,3 +1,4 @@
+
 const pets = [
   {
     id: 1,
@@ -280,7 +281,7 @@ app.innerHTML = "welcome to pets"
 
 
 
-//need help understanding this
+//need help understanding this// pants analogy from alex. you got cargo pants with numbers, and someone gives you a key and tells you to put it in pocket 4
 const renderToDom = (divId, htmlToRender) => {
   const selectedDiv = document.querySelector(divId);
   selectedDiv.innerHTML = htmlToRender
@@ -289,7 +290,7 @@ const renderToDom = (divId, htmlToRender) => {
 const cardsOnDom = (pets) => {
   let domString = ""
   for (const pet of pets) { 
-    domString += `<div class="myAnimalcard" style="width: 18rem;">
+    domString += `<div class="myAnimalCard" style="width: 18rem;">
     <h5 class="card-title">${pet.name}</h5>
     <img src="${pet.imageUrl}" 
     class="card-img-top" alt="...">
@@ -297,6 +298,8 @@ const cardsOnDom = (pets) => {
     <p class="card-text">Color: ${pet.color}</p>
     <p class="card-text">Special Skill: ${pet.specialSkill}</p>
     <p class="card-text">${pet.type}</p>
+    <footer class="card-footer"></footer>
+        <button class="btn btn-danger" id="delete--${pet.id}" class="delbtn">Delete </button>
   </div>
 </div>`;
 }
@@ -311,19 +314,10 @@ const catButton = document.querySelector("#Cat")
 const dinoButton = document.querySelector("#Dino")
 const allButton = document.querySelector("#All")
 
-//function to filter pets with a specific type
-const filter = (pets, animalType) => {
-  let petArray = []; //intialized an empty array that will store the pets the match specified animal type.
-    for (pet of pets)
-      if(pet.type === animalType) { //it checks if pet.type is equal to animalType. if they match, it means the pet is the desired type.
-        petArray.push(pet) // the entire array, you can use this method to dynamically add elements to an array
-      }
-      cardsOnDom(petArray)
-}
-
 //add click even to show all the pets on button cluck using the function we created
 dogButton.addEventListener("click", () => {
   filter(pets, "dog")
+  console.log("clicky"); 
 });
 
 catButton.addEventListener("click", () => {
@@ -337,3 +331,66 @@ dinoButton.addEventListener("click", () => {
 allButton.addEventListener("click", () => {
   cardsOnDom(pets)
 });
+
+//function to filter pets with a specific type
+const filter = (pets, animalType) => {
+  let petArray = []; //intialized an empty array that will store the pets the match specified animal type.
+    for (pet of pets)
+      if(pet.type === animalType) { //it checks if pet.type is equal to animalType. if they match, it means the pet is the desired type.
+        petArray.push(pet) // the entire array, you can use this method to dynamically add elements to an array
+      }
+      cardsOnDom(petArray)
+}
+
+// ****** CREATE ****** //
+// 1. select/target the form on the DOM
+const form = document.querySelector('form')
+  
+// 2. create a function that grabs all the values from the form, pushes the new object to the array, 
+//then repaints the DOM with the new teammate
+const newPet = (event) => {
+  event.preventDefault() //// EVERY TIME YOU CREATE A FORM
+
+  const newPetObj = {
+    id: pets.length + 1, 
+    name: document.querySelector("#petName").value,
+    color: document.querySelector("#petColor").value,
+    specialSkill: document.querySelector("#petSkill").value,
+    type: document.querySelector('input[name="exampleRadios"]:checked').value,
+    imageUrl: document.querySelector("#petImg").value,
+   }; 
+
+  pets.push(newPetObj);
+  cardsOnDom(pets);
+  form.reset();
+}
+// 3. Add an event listener for the form submit and pass it the function (callback)
+form.addEventListener('submit', newPet)
+
+//delete 
+// Here we will be using event bubbling
+// 1. Target the app div
+// 2. Add an event listener to capture clicks
+// 3. check e.target.id includes "delete"
+// 4. add logic to remove from array
+// 5. Repaint the DOM with the updated array
+// 6. Organize code so that everything is in a function except selectors
+
+
+app.addEventListener("click", (e) => {
+  if (e.target.id.includes("delete")) {
+    const [, id] = e.target.id.split("--");
+    const index = pets.findIndex((object) => object.id === Number(id));
+
+    pets.splice(index, 1);
+    cardsOnDom(pets);
+  }
+});
+
+const startApp = () => {
+  cardsOnDom(pets);
+  e();
+}
+
+
+startApp();
